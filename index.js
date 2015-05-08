@@ -6,9 +6,7 @@ var PluginError = gutil.PluginError;
 var _ = require('lodash');
 var htmlparser = require('htmlparser');
 var rules = require('./rules');
-
-// Consts
-const PLUGIN_NAME = 'gulp-ng-template-validate';
+var PLUGIN_NAME = 'gulp-ng-template-validate';
 
 function ngTemplateValidate() {
     var currentFile;
