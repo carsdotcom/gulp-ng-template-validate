@@ -42,7 +42,8 @@ function ngTemplateValidate() {
         }
 
         if (file.isStream()) {
-            // throw error
+            this.emit('error', new PluginError(PLUGIN_NAME, 'Streams not supported at this time.'));
+            return cb();
         }
 
         if (file.isBuffer()) {
