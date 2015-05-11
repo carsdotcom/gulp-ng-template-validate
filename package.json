@@ -9,17 +9,23 @@
         "type": "git",
         "url": "https://github.com/carsdotcom/gulp-ng-template-validate.git"
     },
-    "main": "index.js",
+    "main": "dist/index.js",
     "keywords": [
         "gulpplugin",
         "angular",
         "template",
         "validation"
     ],
+    "scripts": {
+        "preinstall": "npm install -g gulp"
+    },
     "dependencies": {
         "gulp-util": "^3.0.4",
         "htmlparser": "^1.7.7",
         "lodash": "^3.8.0",
         "through2": "^0.6.5"
+    },
+    "devDependencies": {
+        "gulp": "^3.8.11"
     }
 }
