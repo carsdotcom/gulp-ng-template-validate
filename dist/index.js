@@ -25,7 +25,11 @@ function ngTemplateValidate() {
     function checkRules (dom) {
         if (dom.type === 'tag') {
             _.forEach(rules, function (theRule) {
-                theRule.rule(currentFile, dom);
+                try {
+                    theRule.rule(currentFile, dom);
+                } catch (e) {
+                    console.log(e);
+                }
             });
         }
     }

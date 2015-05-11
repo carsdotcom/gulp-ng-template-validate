@@ -17,7 +17,8 @@
         "validation"
     ],
     "scripts": {
-        "preinstall": "npm install -g gulp"
+        "preinstall": "npm install -g gulp mocha",
+        "test": "mocha"
     },
     "dependencies": {
         "gulp-util": "^3.0.4",
@@ -26,6 +27,10 @@
         "through2": "^0.6.5"
     },
     "devDependencies": {
-        "gulp": "^3.8.11"
+        "del": "^1.1.1",
+        "gulp": "^3.8.11",
+        "mocha": "^2.2.4",
+        "run-sequence": "^1.1.0",
+        "should": "^6.0.1"
     }
 }
