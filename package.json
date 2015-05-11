@@ -11,7 +11,10 @@
     },
     "main": "index.js",
     "keywords": [
-        "gulp-plugin"
+        "gulpplugin",
+        "angular",
+        "template",
+        "validation"
     ],
     "dependencies": {
         "gulp-util": "^3.0.4",
