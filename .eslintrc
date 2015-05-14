@@ -1,0 +1,24 @@
+{
+    "env": {
+        "node": true
+    },
+    "globals": {
+        // commonjs
+        "require": false,
+
+        // mocha
+        "describe": false,
+        "context": false,
+        "it": false,
+        "beforeEach": false,
+        "afterEach": false
+
+    },
+    "rules": {
+        "strict": 0,
+        "quotes": [1, "single", "avoid-escape"],
+        "no-use-before-define": 0,
+        "no-new": 0,
+        "space-infix-ops": 0
+    }
+}
