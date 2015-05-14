@@ -78,5 +78,5 @@ module.exports = [
 ];
 
 function reportError(rule, file, node) {
-    throw file + ' - Warning:' + rule.msg + ' (' + rule.name + ')';
+    throw file + ' - Warning: ' + rule.msg + ' (' + rule.name + ')';
 }
