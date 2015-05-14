@@ -10,23 +10,23 @@ var PLUGIN_NAME = 'gulp-ng-template-validate';
 function ngTemplateValidate() {
     var currentFile;
 
-    function parseHandler (error, dom) {
-        _.forEach(dom, validate);
+    function parseDom (error, dom) {
+        _.forEach(dom, validateNodeAndChildren);
     }
 
-    function validate (node) {
-        checkRules(node);
+    function validateNodeAndChildren (node) {
+        validateNode(node);
 
         _.forEach(node.children, function (child) {
-            validate(child);
+            validateNodeAndChildren(child);
         });
     }
 
-    function checkRules (dom) {
-        if (dom.type === 'tag') {
+    function validateNode (node) {
+        if (node.type === 'tag') {
             _.forEach(rules, function (theRule) {
                 try {
-                    theRule.rule(currentFile, dom);
+                    theRule.rule(currentFile, node);
                 } catch (e) {
                     console.log(e);
                 }
@@ -47,7 +47,7 @@ function ngTemplateValidate() {
         }
 
         if (file.isBuffer()) {
-            handler = new htmlparser.DefaultHandler(parseHandler);
+            handler = new htmlparser.DefaultHandler(parseDom);
             parser = new htmlparser.Parser(handler);
 
             currentFile = file.path;

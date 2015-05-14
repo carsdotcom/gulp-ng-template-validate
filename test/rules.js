@@ -1,6 +1,6 @@
 var rules = require('../src/rules');
-var should = require('should');
 var _ = require('lodash');
+require('should');
 
 describe('gulp-ng-template-validate', function() {
     context('rules', function () {

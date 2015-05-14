@@ -1,8 +1,8 @@
 var validate = require('../src/index');
-var should = require('should');
 var File = require('vinyl');
 var es = require('event-stream');
 var sinon = require('sinon');
+require('should');
 
 describe('gulp-ng-template-validate', function() {
     var stream;
@@ -33,7 +33,7 @@ describe('gulp-ng-template-validate', function() {
 
             it('should log an error for invalid html', function () {
                 var fakeFile = new File({
-                    path: "fakeFile.html",
+                    path: 'fakeFile.html',
                     contents: new Buffer('<a href="{{foo}}">foo anchor</a>')
                 });
 
@@ -44,7 +44,7 @@ describe('gulp-ng-template-validate', function() {
 
             it('should log an error for invalid html nested within valid html', function () {
                 var fakeFile = new File({
-                    path: "fakeFile.html",
+                    path: 'fakeFile.html',
                     contents: new Buffer('<ul><li>foo></li><li><a href="{{foo}}">foo anchor</a></li></ul>')
                 });
 
