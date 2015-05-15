@@ -1,40 +1,40 @@
 {
-    "name": "gulp-ng-template-validate",
-    "version": "0.0.5",
-    "description": "Gulp plugin for validating AngularJS templates for common issues.",
-    "author": "Kevin Phillips <kphillips@cars.com>",
-    "license": "Apache 2.0",
-    "homepage": "https://github.com/carsdotcom/gulp-ng-template-validate",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/carsdotcom/gulp-ng-template-validate.git"
-    },
-    "main": "dist/index.js",
-    "keywords": [
-        "gulpplugin",
-        "angular",
-        "template",
-        "validation"
-    ],
-    "scripts": {
-        "test": "gulp test"
-    },
-    "dependencies": {
-        "gulp-util": "^3.0.4",
-        "htmlparser": "^1.7.7",
-        "lodash": "^3.8.0",
-        "through2": "^0.6.5"
-    },
-    "devDependencies": {
-        "del": "^1.1.1",
-        "event-stream": "^3.3.1",
-        "gulp": "^3.8.11",
-        "gulp-eslint": "^0.12.0",
-        "gulp-mocha": "^2.0.1",
-        "mocha": "^2.2.4",
-        "run-sequence": "^1.1.0",
-        "should": "^6.0.1",
-        "sinon": "^1.14.1",
-        "vinyl": "^0.4.6"
-    }
+  "name": "gulp-ng-template-validate",
+  "version": "0.0.6",
+  "description": "Gulp plugin for validating AngularJS templates for common issues.",
+  "author": "Kevin Phillips <kphillips@cars.com>",
+  "license": "Apache 2.0",
+  "homepage": "https://github.com/carsdotcom/gulp-ng-template-validate",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/carsdotcom/gulp-ng-template-validate.git"
+  },
+  "main": "dist/index.js",
+  "keywords": [
+    "gulpplugin",
+    "angular",
+    "template",
+    "validation"
+  ],
+  "scripts": {
+    "test": "gulp test"
+  },
+  "dependencies": {
+    "gulp-util": "^3.0.4",
+    "htmlparser": "^1.7.7",
+    "lodash": "^3.8.0",
+    "through2": "^0.6.5"
+  },
+  "devDependencies": {
+    "del": "^1.1.1",
+    "event-stream": "^3.3.1",
+    "gulp": "^3.8.11",
+    "gulp-eslint": "^0.12.0",
+    "gulp-mocha": "^2.0.1",
+    "mocha": "^2.2.4",
+    "run-sequence": "^1.1.0",
+    "should": "^6.0.1",
+    "sinon": "^1.14.1",
+    "vinyl": "^0.4.6"
+  }
 }
