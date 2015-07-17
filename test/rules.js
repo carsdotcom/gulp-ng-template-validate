@@ -9,7 +9,7 @@ describe('gulp-ng-template-validate', function() {
 
             it('should report an error when href value contains `{{`', function () {
                 (function () {
-                    rule.rule('foo.js', {
+                    rule.rule('foo.js', 1, {
                         raw: 'a href="{{prop}}"',
                         type: 'tag',
                         name: 'a',
@@ -26,7 +26,7 @@ describe('gulp-ng-template-validate', function() {
 
             it('should report an error when src value contains `{{`', function () {
                 (function () {
-                    rule.rule('foo.js', {
+                    rule.rule('foo.js', 1, {
                         raw: 'img src="{{prop}}"',
                         type: 'tag',
                         name: 'img',
@@ -43,7 +43,7 @@ describe('gulp-ng-template-validate', function() {
 
             it('should report an error when style value contains `{{`', function () {
                 (function () {
-                    rule.rule('foo.js', {
+                    rule.rule('foo.js', 1, {
                         raw: 'div style="background-image: {{prop}}"',
                         type: 'tag',
                         name: 'div',
@@ -60,7 +60,7 @@ describe('gulp-ng-template-validate', function() {
 
             it('should report an error when ng-model does not contain a `.`', function () {
                 (function () {
-                    rule.rule('foo.js', {
+                    rule.rule('foo.js', 1, {
                         raw: 'input type="text" ng-model="prop"',
                         type: 'tag',
                         name: 'input',

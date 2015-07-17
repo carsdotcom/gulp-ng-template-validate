@@ -22,8 +22,13 @@ describe('gulp-ng-template-validate', function() {
             });
 
             it('should not throw an error', function () {
-                var fakeFile = new File({
-                    contents: new Buffer('<a ng-href="{{foo}}">foo anchor</a>')
+                var fakeFile,
+                    fakeFileContents;
+
+                fakeFileContents = '<a ng-href="{{foo}}">foo anchor</a>';
+
+                fakeFile = new File({
+                    contents: new Buffer(fakeFileContents)
                 });
 
                 (function () {
@@ -31,26 +36,178 @@ describe('gulp-ng-template-validate', function() {
                 }).should.not.throw();
             });
 
-            it('should log an error for invalid html', function () {
-                var fakeFile = new File({
-                    path: 'fakeFile.html',
-                    contents: new Buffer('<a href="{{foo}}">foo anchor</a>')
+            context('html with errors', function () {
+                var testCases = [
+                    {
+                        fileName: 'fileWithErrorOnLine1.html',
+                        html: [
+                            '<a href="{{foo}}">',
+                                'foo anchor',
+                            '</a>'
+                        ],
+                        logMsgs: [ 'fileWithErrorOnLine1.html, line 1 - Warning: Angular expression used within href attribute. (prefer-ng-href)' ]
+                    },
+                    {
+                        fileName: 'fileWithErrorOnLine6.html',
+                        html: [
+                            '<ul>',
+                                '<li>',
+                                    'foo',
+                                '</li>',
+                                '<li>',
+                                    '<a href="{{foo}}">',
+                                        'foo anchor',
+                                    '</a>',
+                                '</li>',
+                            '</ul>'
+                        ],
+                        logMsgs: [ 'fileWithErrorOnLine6.html, line 6 - Warning: Angular expression used within href attribute. (prefer-ng-href)' ]
+                    },
+                    {
+                        fileName: 'fileWithErrorOnLine7.html',
+                        html: [
+                            '<ul>',
+                                '<li>',
+                                    'foo',
+                                '</li>',
+                                '<li>',
+                                    '<a',
+                                       'href="{{foo}}">',
+                                        'foo anchor',
+                                    '</a>',
+                                '</li>',
+                            '</ul>'
+                        ],
+                        logMsgs: [ 'fileWithErrorOnLine7.html, line 7 - Warning: Angular expression used within href attribute. (prefer-ng-href)' ]
+                    },
+                    {
+                        fileName: 'fileWithErrorOnLine8.html',
+                        html: [
+                            '<ul>',
+                                '<li>',
+                                    'foo',
+                                '</li>',
+                                '<li>',
+                                    '<a',
+                                        'id="foo"',
+                                        'href="{{foo}}">',
+                                        'foo anchor',
+                                    '</a>',
+                                '</li>',
+                            '</ul>'
+                        ],
+                        logMsgs: [ 'fileWithErrorOnLine8.html, line 8 - Warning: Angular expression used within href attribute. (prefer-ng-href)' ]
+                    },
+                    {
+                        fileName: 'fileWithErrorOnLine6ThenLineBreak.html',
+                        html: [
+                            '<ul>',
+                                '<li>',
+                                    'foo',
+                                '</li>',
+                                '<li>',
+                                    '<a href="{{foo}}"',
+                                        '>',
+                                        'foo anchor',
+                                    '</a>',
+                                '</li>',
+                            '</ul>'
+                        ],
+                        logMsgs: [ 'fileWithErrorOnLine6ThenLineBreak.html, line 6 - Warning: Angular expression used within href attribute. (prefer-ng-href)' ]
+                    },
+                    {
+                        fileName: 'fileWithLineBreaksInTagWithoutErrors.html',
+                        html: [
+                            '<ul>',
+                                '<li>',
+                                    '<img',
+                                        'ng-src="{{bar}}" />',
+                                '</li>',
+                                '<li>',
+                                    '<a',
+                                       'href="{{foo}}">',
+                                        'foo anchor',
+                                    '</a>',
+                                '</li>',
+                            '</ul>'
+                        ],
+                        logMsgs: [
+                            'fileWithLineBreaksInTagWithoutErrors.html, line 8 - Warning: Angular expression used within href attribute. (prefer-ng-href)'
+
+                        ]
+                    },
+                    {
+                        fileName: 'fileWithMultipleErrors.html',
+                        html: [
+                            '<ul>',
+                                '<li>',
+                                    '<img src="{{bar}}" />',
+                                '</li>',
+                                '<li>',
+                                    '<a',
+                                       'href="{{foo}}">',
+                                        'foo anchor',
+                                    '</a>',
+                                '</li>',
+                            '</ul>'
+                        ],
+                        logMsgs: [
+                            'fileWithMultipleErrors.html, line 3 - Warning: Angular expression used within src attribute. (prefer-ng-src)',
+                            'fileWithMultipleErrors.html, line 7 - Warning: Angular expression used within href attribute. (prefer-ng-href)'
+
+                        ]
+                    },
+                    {
+                        fileName: 'fileWithMultipleAngularExpressions.html',
+                        html: [
+                            '<a',
+                                'id="{{id}}"',
+                                'href="{{foo}}">',
+                                    'foo anchor',
+                            '</a>'
+                        ],
+                        logMsgs: [
+                            'fileWithMultipleAngularExpressions.html, line 3 - Warning: Angular expression used within href attribute. (prefer-ng-href)'
+
+                        ]
+                    },
+                    {
+                        fileName: 'fileWithMultipleAngularExpressionsAndAMissingRequiredProperty.html',
+                        html: [
+                            '<input',
+                                'type="text"',
+                                'id="{{id}}"',
+                                'ng-model="{{foo}}">',
+                            '</input>'
+                        ],
+                        logMsgs: [
+                            'fileWithMultipleAngularExpressionsAndAMissingRequiredProperty.html, line 4 - Warning: No `.` in ng-model expression. (ng-model-dot)'
+
+                        ]
+                    }
+                ];
+
+                it('should log errors', function () {
+                    var currentLogMsg = 0;
+
+                    testCases.forEach(function (testCase) {
+                        var fakeFile,
+                            fakeFileContents;
+
+                        fakeFileContents = testCase.html.join('\n');
+
+                        fakeFile = new File({
+                            path: testCase.fileName,
+                            contents: new Buffer(fakeFileContents)
+                        });
+
+                        stream.write(fakeFile);
+
+                        testCase.logMsgs.forEach(function (msg) {
+                            console.log.getCall(currentLogMsg++).args[0].should.eql(msg);
+                        });
+                    });
                 });
-
-                stream.write(fakeFile);
-
-                console.log.getCall(0).args[0].should.eql('fakeFile.html - Warning: Angular expression used within href attribute. (prefer-ng-href)');
-            });
-
-            it('should log an error for invalid html nested within valid html', function () {
-                var fakeFile = new File({
-                    path: 'fakeFile.html',
-                    contents: new Buffer('<ul><li>foo></li><li><a href="{{foo}}">foo anchor</a></li></ul>')
-                });
-
-                stream.write(fakeFile);
-
-                console.log.getCall(0).args[0].should.eql('fakeFile.html - Warning: Angular expression used within href attribute. (prefer-ng-href)');
             });
         });
 

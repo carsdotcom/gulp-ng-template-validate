@@ -54,18 +54,46 @@ var rules = [
 ];
 
 function generateRule(options) {
-    return function(file, node) {
+    return function(file, lineNum, node) {
         _.forEach(node.attribs, function (value, attrib) {
             if (attrib === options.attrib) {
                 _.forEach(options.disallow, function (key) {
+                    var tagLineNum = 0,
+                        offendingAttribNum,
+                        offendingCharNum;
+
                     if (value.indexOf(key) >= 0) {
-                        throw file + ' - Warning: ' + options.msg + ' (' + options.name + ')';
+                        if (node.raw.indexOf('\n') > 0) {
+                            offendingAttribNum = node.raw.indexOf(attrib);
+                            offendingCharNum = offendingAttribNum + node.raw.substring(offendingAttribNum).indexOf(key) + 1;
+                            tagLineNum = (node.raw.substring(0, offendingCharNum).split('\n').length - 1);
+                        }
+
+                        throw {
+                            file: file,
+                            tagLineNum: tagLineNum,
+                            msg: options.msg,
+                            ruleName: options.name
+                        };
                     }
                 });
 
                 _.forEach(options.require, function (key) {
+                    var tagLineNum = 0,
+                        offendingCharNum;
+
                     if (value.indexOf(key) === -1) {
-                        throw file + ' - Warning: ' + options.msg + ' (' + options.name + ')';
+                        if (node.raw.indexOf('\n') > 0) {
+                            offendingCharNum = node.raw.indexOf(attrib);
+                            tagLineNum = (node.raw.substring(0, offendingCharNum).split('\n').length - 1);
+                        }
+
+                        throw {
+                            file: file,
+                            tagLineNum: tagLineNum,
+                            msg: options.msg,
+                            ruleName: options.name
+                        };
                     }
                 });
             }

@@ -7,8 +7,8 @@ var htmlparser = require('htmlparser');
 var rules = require('./rules');
 var PLUGIN_NAME = 'gulp-ng-template-validate';
 
-function ngTemplateValidate() {
-    var currentFile;
+function createParser (fileName) {
+    var lineNum = 1;
 
     function parseDom (error, dom) {
         _.forEach(dom, validateNodeAndChildren);
@@ -23,17 +23,27 @@ function ngTemplateValidate() {
     }
 
     function validateNode (node) {
+        if (node.type === 'text') {
+            lineNum += (node.raw.split('\n').length - 1);
+        }
+
         if (node.type === 'tag') {
             _.forEach(rules, function (theRule) {
                 try {
-                    theRule.rule(currentFile, node);
+                    theRule.rule(fileName, lineNum, node);
                 } catch (e) {
-                    console.log(e);
+                    console.log(e.file + ', line ' + (lineNum + e.tagLineNum) + ' - Warning: ' + e.msg + ' (' + e.ruleName + ')');
                 }
             });
+
+            lineNum += (node.raw.split('\n').length - 1);
         }
     }
 
+    return parseDom;
+}
+
+function ngTemplateValidate() {
     function transform(file, enc, cb) {
         var handler, parser;
 
@@ -47,10 +57,9 @@ function ngTemplateValidate() {
         }
 
         if (file.isBuffer()) {
-            handler = new htmlparser.DefaultHandler(parseDom);
+            handler = new htmlparser.DefaultHandler(createParser(file.path));
             parser = new htmlparser.Parser(handler);
 
-            currentFile = file.path;
             parser.parseComplete(file.contents.toString('utf8'));
         }
 
