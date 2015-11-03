@@ -187,10 +187,8 @@ describe('gulp-ng-template-validate', function() {
                     }
                 ];
 
-                it('should log errors', function () {
-                    var currentLogMsg = 0;
-
-                    testCases.forEach(function (testCase) {
+                it('should have an eslint object on file', function() {
+                    testCases.forEach(function(testCase){
                         var fakeFile,
                             fakeFileContents;
 
@@ -202,10 +200,8 @@ describe('gulp-ng-template-validate', function() {
                         });
 
                         stream.write(fakeFile);
-
-                        testCase.logMsgs.forEach(function (msg) {
-                            console.log.getCall(currentLogMsg++).args[0].should.eql(msg);
-                        });
+                        (typeof fakeFile.eslint).should.equal('object');
+                        (fakeFile.eslint.messages instanceof Array).should.equal(true);
                     });
                 });
             });
