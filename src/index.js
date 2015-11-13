@@ -7,7 +7,7 @@ var htmlparser = require('htmlparser');
 var rules = require('./rules');
 var PLUGIN_NAME = 'gulp-ng-template-validate';
 
-function createParser (fileName) {
+function createParser (fileName, file) {
     var lineNum = 1;
 
     function parseDom (error, dom) {
@@ -16,7 +16,6 @@ function createParser (fileName) {
 
     function validateNodeAndChildren (node) {
         validateNode(node);
-
         _.forEach(node.children, function (child) {
             validateNodeAndChildren(child);
         });
@@ -32,10 +31,17 @@ function createParser (fileName) {
                 try {
                     theRule.rule(fileName, lineNum, node);
                 } catch (e) {
-                    console.log(e.file + ', line ' + (lineNum + e.tagLineNum) + ' - Warning: ' + e.msg + ' (' + e.ruleName + ')');
+                    file.eslint.messages.push({
+                        ruleId: e.ruleName,
+                        severity: e.severity,
+                        message: e.msg,
+                        line: lineNum,
+                        column: 0,
+                        nodeType: node.type,
+                        source: ''
+                    });
                 }
             });
-
             lineNum += (node.raw.split('\n').length - 1);
         }
     }
@@ -46,6 +52,11 @@ function createParser (fileName) {
 function ngTemplateValidate() {
     function transform(file, enc, cb) {
         var handler, parser;
+        file.eslint = {
+            filePath: file.path,
+            messages: [],
+            error: null
+        };
 
         if (file.isNull()) {
             cb(null, file);
@@ -57,10 +68,10 @@ function ngTemplateValidate() {
         }
 
         if (file.isBuffer()) {
-            handler = new htmlparser.DefaultHandler(createParser(file.path));
+            handler = new htmlparser.DefaultHandler(createParser(file.path, file));
             parser = new htmlparser.Parser(handler);
-
             parser.parseComplete(file.contents.toString('utf8'));
+
         }
 
         cb(null, file);

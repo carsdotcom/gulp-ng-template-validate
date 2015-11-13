@@ -19,7 +19,8 @@ var rules = [
         attrib: 'href',
         disallow: ['{{'],
         require: [],
-        msg: 'Angular expression used within href attribute.'
+        msg: 'Angular expression used within href attribute.',
+        severity: 1
     },
     /**
      * `src="{{prop}}"` can cause a request for an incorrect resource. Prefer `ng-src="{{prop}}"`.
@@ -29,7 +30,8 @@ var rules = [
         attrib: 'src',
         disallow: ['{{'],
         require: [],
-        msg: 'Angular expression used within src attribute.'
+        msg: 'Angular expression used within src attribute.',
+        severity: 1
     },
     /**
      * `style="background-image:{{prop}}"` can cause a request for an incorrect resource. Prefer `ng-style="'background-image':'{{prop}}'"`.
@@ -39,7 +41,8 @@ var rules = [
         attrib: 'style',
         disallow: ['{{'],
         require: [],
-        msg: 'Angular expression used within style attribute.'
+        msg: 'Angular expression used within style attribute.',
+        severity: 1
     },
     /**
      * `<input ng-model="prop">` can cause shadowing of inherited properties and confusing UI behavior. Prefer `<input ng-model="prop.foo">`.
@@ -49,7 +52,8 @@ var rules = [
         attrib: 'ng-model',
         disallow: [],
         require: ['.'],
-        msg: 'No `.` in ng-model expression.'
+        msg: 'No `.` in ng-model expression.',
+        severity: 1
     }
 ];
 
@@ -73,6 +77,7 @@ function generateRule(options) {
                             file: file,
                             tagLineNum: tagLineNum,
                             msg: options.msg,
+                            severity: options.severity,
                             ruleName: options.name
                         };
                     }
@@ -92,6 +97,7 @@ function generateRule(options) {
                             file: file,
                             tagLineNum: tagLineNum,
                             msg: options.msg,
+                            severity: options.severity,
                             ruleName: options.name
                         };
                     }
