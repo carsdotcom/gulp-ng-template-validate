@@ -1,6 +1,6 @@
 {
   "name": "gulp-ng-template-validate",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Gulp plugin for validating AngularJS templates for common issues.",
   "author": "Kevin Phillips <kphillips@cars.com>",
   "license": "Apache 2.0",
