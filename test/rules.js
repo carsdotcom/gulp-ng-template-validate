@@ -5,7 +5,7 @@ require('should');
 describe('gulp-ng-template-validate', function() {
     context('rules', function () {
         context('prefer-ng-href', function () {
-            var rule = _.findWhere(rules, { name: 'prefer-ng-href' });
+            var rule = rules.find(function(r) { return r.name === 'prefer-ng-href'; });
 
             it('should report an error when href value contains `{{`', function () {
                 (function () {
@@ -22,7 +22,7 @@ describe('gulp-ng-template-validate', function() {
         });
 
         context('prefer-ng-src', function () {
-            var rule = _.findWhere(rules, { name: 'prefer-ng-src' });
+            var rule = rules.find(function(r) { return r.name === 'prefer-ng-src'; });
 
             it('should report an error when src value contains `{{`', function () {
                 (function () {
@@ -39,7 +39,7 @@ describe('gulp-ng-template-validate', function() {
         });
 
         context('prefer-ng-style', function () {
-            var rule = _.findWhere(rules, { name: 'prefer-ng-style' });
+            var rule = rules.find(function(r) { return r.name === 'prefer-ng-style'; });
 
             it('should report an error when style value contains `{{`', function () {
                 (function () {
@@ -56,7 +56,7 @@ describe('gulp-ng-template-validate', function() {
         });
 
         context('ng-model-dot', function () {
-            var rule = _.findWhere(rules, { name: 'ng-model-dot' });
+            var rule = rules.find(function(r) { return r.name === 'ng-model-dot'; });
 
             it('should report an error when ng-model does not contain a `.`', function () {
                 (function () {
